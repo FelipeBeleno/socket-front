@@ -24,18 +24,23 @@ export const fetchSinToken = async (endpoint, data, method = "GET") => {
 }
 
 
-export const fetchConnToken = async (endpoint, data, method = "GET") => {
+export const fetchConToken = async (endpoint, data, method = "GET") => {
 
     const url = `${baseUrl}/${endpoint}`
     if (method === 'GET') {
-        const resp = await fetch(url)
+        const resp = await fetch(url, {
+            headers: {
+                'x-token': localStorage.getItem('token')
+            }
+        })
         return await resp.json()
     } else {
 
         const resp = await fetch(url, {
             method,
             headers: {
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
+                'x-token': localStorage.getItem('token')
             },
             body: data
         })

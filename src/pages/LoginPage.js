@@ -1,6 +1,9 @@
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2'
 import { AuthContext } from '../auth/AuthContext';
+
+
 
 export const LoginPage = () => {
 
@@ -32,7 +35,7 @@ export const LoginPage = () => {
     }
 
 
-    function onSubmit(e) {
+    async function onSubmit(e) {
         e.preventDefault();
 
         if (form.rememberme) {
@@ -43,8 +46,19 @@ export const LoginPage = () => {
 
         const { email, password } = form;
         // TODO llamar backend
-        login(email, password)
+        const result = await login(email, password);
 
+        console.log(result)
+
+        if (!result) {
+            Swal.fire('Error', 'Verifique el usuario y contraseña', 'error')
+        }
+    }
+
+
+    function todoOk() {
+
+        return (form.email.length > 0 && form.password.length > 0)
     }
 
     return (
@@ -93,7 +107,10 @@ export const LoginPage = () => {
             </div>
 
             <div className="container-login100-form-btn m-t-17">
-                <button className="login100-form-btn">
+                <button 
+                type='submit'
+                disabled={!todoOk()}
+                className="login100-form-btn">
                     Ingresar
                 </button>
             </div>
